@@ -1,0 +1,97 @@
+#include<stdio.h>
+struct Node
+{
+	int data;
+	struct Node *next;	
+}*first;
+void createNode(int a[], int n)
+{
+	struct Node *last;
+	first = malloc(sizeof(struct Node));
+	first->data = a[0];
+	first->next = NULL;
+	last = first;
+	
+	struct Node *temp;
+	int i;
+	for(i=1; i<n; i++)
+	{
+		temp = malloc(sizeof(struct Node));
+		temp->data = a[i];
+		temp->next = NULL;
+		
+		last->next = temp;
+		last = temp;
+	}
+}
+void display(struct Node *p)
+{
+	while(p!=NULL)
+	{
+		printf("%d\n", p->data);
+		p = p->next;
+	}
+}
+void recursiveDisplay(struct Node *p)
+{
+	if(p !=NULL)
+	{
+		printf("%d\n", p->data);
+		recursiveDisplay(p->next);
+	} 
+}
+void insertNode(struct Node *p, int index, int x)
+{
+	struct Node *temp;
+	int i;
+	temp = malloc(sizeof(struct Node));
+	temp->data = x;
+	if(index == 0)
+	{
+		temp->next = first;
+		first = temp;
+	}
+	else
+	{
+		for(i=0; i<index-1; i++)
+		{
+			p = p->next;
+		}
+		temp->next = p->next;
+		p->next = temp;
+	}
+}
+void deleteNode(struct Node *p, int index)
+{
+	struct Node *q = NULL;
+	int x, i;
+	if (index == 0)
+	{
+		x = first->data;
+		first = first->next;
+		free(p);
+		return x;
+	}
+	else
+	{
+		for(i=0; i<index; i++)
+		{
+			q = p;
+			p = p->next;
+		}
+		x = p->data;
+		q->next = p->next;
+		free(p);
+		return x; 
+	}
+}
+int main()
+{
+	int arr[] = {1, 2,3 , 4};
+	createNode(arr, 4);
+	display(first);
+	insertNode(first, 2, 11);
+	recursiveDisplay(first);
+	int res = deleteNode(first, 2);
+	printf("Deleted Node is: %d", res);
+}
